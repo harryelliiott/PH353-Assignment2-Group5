@@ -2,7 +2,6 @@
 
 
 import numpy as np
-import random
 
 def H(x): # defining the Hamiltonian
     H = x**2
@@ -30,10 +29,9 @@ for n in range(configurations):
     x = met_alg(x, d, b)
     x_array[n] = x
     
-
 print(x_array)
 xax = np.zeros(int(configurations))
 for n in range(configurations):
     xax[n] = n+1
-    import matplotlib.pyplot as plt
-plt.plot(xax, x_array)
+import matplotlib.pyplot as plt
+plt.hist(x_array, bins = 50, density = True)
