@@ -40,7 +40,7 @@ def U(beta):
         U_array[n] = sum(placeholder2)/len(placeholder2)
     Z = sum(exp_array)/len(exp_array)
     U = sum(U_array)/(len(U_array)*Z)
-    delta_U = sum((U_array-U)**2)/(len(U_array)*(len(U_array)-1))
+    delta_U = np.sqrt(sum((U_array-U)**2)/(len(U_array)*(len(U_array)-1)))
     result = np.zeros(1,2)
     result[0,0],[0,1] = U,delta_U
     return result
