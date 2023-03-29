@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 29 16:15:45 2023
-
-@author: harry
-"""
 
 import numpy as np
 
@@ -33,38 +28,32 @@ for n in range(configurations):
     x = met_alg(x, d, b)
     x_array[n] = x
     
-print(x_array)
 xax = np.zeros(int(configurations))
 for n in range(configurations):
     xax[n] = n+1
 import matplotlib.pyplot as plt
 plt.hist(x_array, bins = 50, density = True)
 
-def U(beta):
-    t = 100000 # changed, placeholder, is probably more complex than this: think (monte carlot time) should be one unit for every configuration?
-    # if so, then t = configurations
-    z_array = np.zeros(round(int(configurations)/t))
-    # unsure of what z_array is for, unused in the rest of the function
-    U_array = np.zeros(round(int(configurations)/t)) # however this would then just be 1
-    # only applies if t is supposed to be monte carlo time 
-    placeholder1 = np.zeros(int(t)) 
-    placeholder2 = np.zeros(int(t))
-    #placeholders for what 
-    for n in range(round(int(configurations/t))):
-        for i in range(t):
-            placeholder1[i] = np.exp(-beta*H(x_array[4*n+1]))
-            placeholder2[i] = H(x_array[4*n+1]) * np.exp(-beta*H(x_array[4*n+1]))
-        exp_array = np.zeros(10000)
-        exp_array[n] = sum(placeholder1)/len(placeholder1)
+    
+def U(beta, tau):
+    z_array = np.zeros(round(int(configurations)/tau)) 
+    U_array = np.zeros(round(int(configurations)/tau))
+    du_array = np.zeros(round(int(configurations)/tau))
+    placeholder1 = np.zeros(int(tau))
+    placeholder2 = np.zeros(int(tau))
+    for n in range(round(int(configurations/tau))):
+        for i in range(tau):
+            placeholder1[i] = np.exp(-beta*H(x_array[tau*n+1]))
+            placeholder2[i] = H(x_array[tau*n+1]) * np.exp(-beta*H(x_array[n*tau+1]))
+        z_array[n] = sum(placeholder1)/len(placeholder1)
         U_array[n] = sum(placeholder2)/len(placeholder2)
-    Z = sum(exp_array)/len(exp_array)
+    Z = sum(z_array)/len(z_array)
+    plt.plot(range(len((U_array))),U_array/Z)
     U = sum(U_array)/(len(U_array)*Z)
     delta_U = np.sqrt(sum((U_array-U)**2)/(len(U_array)*(len(U_array)-1)))
-    result = np.zeros((1,2), dtype = float) # changed 
-#    result[0,0],[0,1] = U,delta_U
-    U, delta_U = result[0,0], result[0,1] # changed 
-    return U, delta_U
+    result = np.zeros((1,2))
+    result[0,0] = U
+    result[0,1] = delta_U
+    return result
 
-# what is the above trying to achieve: finding internal energy as function of beta
-# find out why is producing zeros 
-# find out appropriate value for monte carlo time 
+#plt.plot(configurations/t,U(beta, int(i for t in range(1,10)))[0,1])
