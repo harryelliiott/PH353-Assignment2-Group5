@@ -26,7 +26,8 @@ x_array = np.zeros(int(configurations)) # storage to be filled with values of x
 
 for n in range(configurations):
     x = met_alg(x, d, b)
-    x_array[n] = x
+    x_array[n] = x 
+    # for reweighting maybe put in U function
     
 xax = np.zeros(int(configurations))
 for n in range(configurations):
@@ -36,8 +37,10 @@ plt.hist(x_array, bins = 50, density = True)
 
     
 def U(beta, tau):
+    
     z_array = np.zeros(round(int(configurations)/tau)) 
     U_array = np.zeros(round(int(configurations)/tau))
+    # once all is generally working, find out why this doesnt work for some tau values 
     du_array = np.zeros(round(int(configurations)/tau))
     placeholder1 = np.zeros(int(tau))
     placeholder2 = np.zeros(int(tau))
