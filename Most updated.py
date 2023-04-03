@@ -17,7 +17,7 @@ def H(x): # defining the Hamiltonian
     H = x**2
     return H
 def U(x,d,beta, t, configurations):
-    while (configurations-20) % t != 0:
+    while (configurations-50) % t != 0:
         configurations = configurations + 1
     x_array = np.zeros(int(configurations))  # storage to be filled with values of x 
     for n in range(configurations):
@@ -25,18 +25,18 @@ def U(x,d,beta, t, configurations):
         x_array[n] = met_alg(x, d, beta)
     new_x_array = np.zeros(configurations-20)
     for n in range(20,configurations):
-        new_x_array[n-20] = x_array[n]
+        new_x_array[n-50] = x_array[n]
     U_array = np.zeros(int((len(new_x_array)/t)))
     placeholder = np.zeros(int(t))
     Z_array = np.zeros(len(new_x_array))
     for n in range(len(new_x_array)):
         Z_array[n] = np.exp(-beta*H(new_x_array[n]))
     Z = sum(Z_array)/len(Z_array)
-    for n in range(int((configurations-20)/t)):
+    for n in range(int((configurations-50)/t)):
         for i in range(t):
             placeholder[i] = H(new_x_array[n+i]) * np.exp(-beta*H(new_x_array[n+i]))
         U_array[n] = sum(placeholder)/(len(placeholder))
-    U = sum(U_array)/(Z*len(new_x_array)/t)
+    U = sum(U_array)/(Z*len(U_array))
     delta_U = np.sqrt(sum((U_array - U)**2)/(len(U_array)*(len(U_array)-1)))
     result = np.zeros((1,2))
     result[0,0] = U
@@ -45,9 +45,9 @@ def U(x,d,beta, t, configurations):
 
 configurations = 100000
 x = 1
-d = 0.1
+d = 1
 max_tau = 20
-beta = 1e-10
+beta = 50
 
         
     
