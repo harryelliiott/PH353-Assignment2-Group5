@@ -53,7 +53,11 @@ def U(x,d,beta, t, configurations):
     result1 = np.zeros((1,2))
     result1[0,0] = U
     result1[0,1] = delta_U
+    return result1
     
+    
+def beta_prime(new_x_array):
+    # maybe put this as a seperate new function, beta function
     beta_list = np.zeros(50) # should be changed, just to get code to work
     for i in range(len(beta_list)):
         beta_list[i] = 50 + i
@@ -83,7 +87,7 @@ def U(x,d,beta, t, configurations):
             result2[b,0] = beta_prime
             result2[b,1] = numerator/denominator
 
-    return result1, result2
+    return result2
 
 configurations = 100000
 x = 1
@@ -96,8 +100,8 @@ beta = 50
 U_data = np.zeros((max_tau-1,2))
 for t in range (1,max_tau):
     ext_U_array = U(x,d,beta,t,configurations)
-    U_data[t-1,0] = ext_U_array[0,0]
-    U_data[t-1,1] = ext_U_array[0,1]
+    U_data[(t-1),0] = ext_U_array[0,0] 
+    U_data[(t-1),1] = ext_U_array[0,1]
 
 
 #plt.plot(range(1,max_tau),U_data[:,1])
