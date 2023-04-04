@@ -60,7 +60,7 @@ def U(x,d,beta, beta_list, t, configurations):
         print(den_array)
         result[b,0] = beta_new
         result[b,1] = numerator/denominator
-        result[b,2] = np.sqrt((sum((np.divide(num_array,den_array)-result[b,1]))**2)/(len(num_array)*(len(num_array)-1)))
+        result[b,2] = np.sqrt((sum(((np.divide(num_array,den_array)-result[b,1]))**2)/(len(num_array)*(len(num_array)-1))))
     return result
 
 configurations = 100000
