@@ -35,4 +35,6 @@ for n in range(configurations):
     xax[n] = n+1
 import matplotlib.pyplot as plt
 plt.hist(x_array, bins = 50, density = True)
+plt.xlabel('H(x)')
+plt.ylabel('probability')
 
