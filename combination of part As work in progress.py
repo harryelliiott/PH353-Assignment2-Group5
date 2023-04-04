@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-
+import matplotlib.pyplot as plt
 def H(x): # defining the Hamiltonian
     H = x**2
     return H
@@ -59,4 +59,14 @@ def U(beta, tau):
     result[0,1] = delta_U
     return result
 
-#plt.plot(configurations/t,U(beta, int(i for t in range(1,10)))[0,1])
+
+tau = np.array(i for t in range(1,10)[0,1]
+#plt.plot(configurations/tau,U(beta, tau)
+matplotlib.pyplot.plot(configurations/tau, U(beta,tau))
+
+
+
+
+
+
+
