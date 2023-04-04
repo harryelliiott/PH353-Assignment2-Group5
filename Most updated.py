@@ -41,7 +41,7 @@ def U(x,d,beta, beta_list, t, configurations):
     result = np.zeros((len(beta_list)+1,3))
     result[0,0] = beta
     result[0,1] = U
-    result[0,2]
+    result[0,2] = delta_U
     for b in range(1,len(beta_list)+1):
         beta_new = beta_list[b-1]
         num_array = np.zeros(int((len(new_x_array)/t)))
