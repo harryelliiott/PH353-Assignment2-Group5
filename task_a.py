@@ -17,14 +17,14 @@ def H(x): # defining the Hamiltonian
     H = x**2
     return H
 def U(x,d,beta, beta_list, t, configurations):
-    while (configurations-20) % t != 0:
+    while (configurations-20) % t != 0: 
         configurations = configurations + 1
     x_array = np.zeros(int(configurations))  # storage to be filled with values of x 
     for n in range(configurations):       
         x_array[n] = met_alg(x, d, beta)
     new_x_array = np.zeros(configurations-20)
     for n in range(20,configurations):
-        new_x_array[n-20] = x_array[n]
+        new_x_array[n-20] = x_array[n] #First 20 configurations taken away to try and find equilibrium (thermalisation)
     U_array = np.zeros(int((len(new_x_array)/t)))
     placeholder = np.zeros(int(t))
     Z_array = np.zeros(len(new_x_array))
@@ -41,7 +41,7 @@ def U(x,d,beta, beta_list, t, configurations):
     result[0,0] = beta
     result[0,1] = U
     result[0,2] = delta_U
-    for b in range(1,len(beta_list)+1):
+    for b in range(1,len(beta_list)+1): # reweighting part
         beta_new = beta_list[b-1]
         num_array = np.zeros(int((len(new_x_array)/t)))
         den_array = np.zeros(int((len(new_x_array)/t)))
@@ -58,6 +58,7 @@ def U(x,d,beta, beta_list, t, configurations):
         result[b,0] = beta_new
         result[b,1] = numerator/denominator
         result[b,2] = np.sqrt((sum(((np.divide(num_array,den_array)-result[b,1]))**2)/(len(num_array)*(len(num_array)-1))))
+        #above line attempts to find the reweighted error
     return result
 
 configurations = 100000
@@ -65,32 +66,23 @@ x = 1
 d = 1
 max_tau = 20
 beta = 50
-beta_list = [40,42,44,46,48,50,52,54,56,58,60]
-MC_data = np.zeros(len(beta_list),3)
-for n in range(len(beta_list)+1):
-    MC_data[n,0] = U(x,d,beta_list[n], [], 20, configurations)[0,0]
-    MC_data[n,1] = U(x,d,beta_list[n], [], 20, configurations)[0,1]
-    MC_data[n,2] = U(x,d,beta_list[n], [], 20, configurations)[0,2]
-re_beta_list = [40,42,44,46,48,52,54,56,58,60]
-reweight_data = U(x,d,beta, re_beta_list, 20, configurations)
-plt.figure()
-plt.subplot(1,2,1)
-plt.errorbar(MC_data[:,0],MC_data[:,1],MC_data[:,2],'b*')
-plt.xlabel("Inverse temperature beta")
-plt.ylabel("Average energy <U>")
-plt.title("Pure Monte Carlo data")
-plt.subplot(1,2,2)
-plt.errorbar(reweight_data[:,0],reweight_data[:,1],reweight_data[:,2],'g*')  
-plt.title("Reweighted data")
-plt.xlabel("Inverse temperature beta")
-plt.ylabel("Average energy <U>") 
-"""U_data = np.zeros((max_tau-1,2))
+U_data = np.zeros((max_tau-1,2))
 for t in range (1,max_tau):
-    ext_U_array = U(x,d,beta,beta_list,t,configurations)
+    ext_U_array = U(x,d,beta,[],t,configurations)
     U_data[t-1,0] = ext_U_array[0,1]
     U_data[t-1,1] = ext_U_array[0,2]
+plt.figure()
+plt.subplot(1,2,1)
+plt.errorbar(range(1,max_tau),U_data[:,0], yerr = U_data[:,1], fmt ='b*')
+plt.xlabel("Bin size")
+plt.ylabel("Average energy <U>")
+plt.title("Average energy against bin size")
+plt.subplot(1,2,2)
+plt.plot(range(1,max_tau),U_data[:,1], 'r*')    
+plt.xlabel("Bin size")
+plt.ylabel("Standard error in <U>")
+plt.title("Error against bin size")
+plt.tight_layout()
+plt.savefig("Average_energy_with_binning.pdf")
+plt.close()
 
-
-#plt.plot(range(1,max_tau),U_data[:,1])
-#plt.errorbar(range(1,max_tau),U_data[:,0], U_data[:,1])"""
-        
