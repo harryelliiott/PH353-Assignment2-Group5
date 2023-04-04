@@ -32,7 +32,7 @@ def U(x,d,beta, beta_list, t, configurations):
     for n in range(len(new_x_array)):
         Z_array[n] = np.exp(-beta*H(new_x_array[n]))
     Z = sum(Z_array)/len(Z_array)
-    for n in range(int((configurations-50)/t)):
+    for n in range(int((len(new_x_array)/t))):
         for i in range(t):
             placeholder[i] = H(new_x_array[t*n+i]) * np.exp(-beta*H(new_x_array[t*n+i]))
         U_array[n] = sum(placeholder)/(len(placeholder))
@@ -48,7 +48,7 @@ def U(x,d,beta, beta_list, t, configurations):
         den_array = np.zeros(int((len(new_x_array)/t)))
         placeholder1 = np.zeros(int(t))
         placeholder2 = np.zeros(int(t))
-        for n in range(int((configurations-50)/t)):
+        for n in range(int((len(new_x_array)/t))):
             for i in range(t):
                 placeholder1[i] = H(new_x_array[t*n+i]) * np.exp(-(beta_new-beta)*H(new_x_array[t*n+i])) *np.exp(-beta*H(new_x_array[t*n+i]))
                 placeholder2[i] = np.exp(-(beta_new-beta)*H(new_x_array[t*n+i])) *np.exp(-beta*H(new_x_array[t*n+i]))
@@ -56,6 +56,8 @@ def U(x,d,beta, beta_list, t, configurations):
             den_array[n] = sum(placeholder2)/(len(placeholder2))
         numerator = sum(num_array)/len(num_array)
         denominator = sum(den_array)/len(den_array)
+        print(num_array)
+        print(den_array)
         result[b,0] = beta_new
         result[b,1] = numerator/denominator
         result[b,2] = np.sqrt((sum((np.divide(num_array,den_array)-result[b,1]))**2)/(len(num_array)*(len(num_array)-1)))
