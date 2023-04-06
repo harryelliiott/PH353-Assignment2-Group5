@@ -12,16 +12,18 @@ x = 0
 d = 0.1
 b = 1
 
-def met_alg(x_initial, d, b): 
+def met_alg(x, d, beta): 
     # d = amount that x is changed by 
     x_new = x + np.random.uniform(-d,d) # interval of fixed width, 2d 
     H_change = H(x_new) - H(x)
-    if H_change < 0:
+    exp = np.exp(-beta*H_change)
+    if exp > 1:
         return x_new
-    elif np.exp(-(b)*H_change) > np.random.uniform(0,1):
-        return x_new
-    elif H_change > 0:
-        return x 
+    elif exp < 1:
+        if np.random.uniform(0,1) <= exp:
+            return x_new
+        else:
+            return x
     
 x_array = np.zeros(int(configurations)) # storage to be filled with values of x 
 
@@ -37,4 +39,6 @@ import matplotlib.pyplot as plt
 plt.hist(x_array, bins = 50, density = True)
 plt.xlabel('H(x)')
 plt.ylabel('probability')
+plt.title("Gaussian distribution")
+plt.savefig('Gaussian_Distribution.pdf')
 
